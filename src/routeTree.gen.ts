@@ -11,10 +11,22 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as SettingsImport } from './routes/settings'
 import { Route as AboutImport } from './routes/about'
+import { Route as LayoverImport } from './routes/_layover'
 import { Route as IndexImport } from './routes/index'
+import { Route as SettingsProfileImport } from './routes/settings/profile'
+import { Route as SettingsNotificationsImport } from './routes/settings/notifications'
+import { Route as SettingsSettingsIdImport } from './routes/settings/$settingsId'
+import { Route as LayoverContactImport } from './routes/_layover.contact'
 
 // Create/Update Routes
+
+const SettingsRoute = SettingsImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AboutRoute = AboutImport.update({
   id: '/about',
@@ -22,10 +34,39 @@ const AboutRoute = AboutImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const LayoverRoute = LayoverImport.update({
+  id: '/_layover',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const SettingsProfileRoute = SettingsProfileImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => SettingsRoute,
+} as any)
+
+const SettingsNotificationsRoute = SettingsNotificationsImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => SettingsRoute,
+} as any)
+
+const SettingsSettingsIdRoute = SettingsSettingsIdImport.update({
+  id: '/$settingsId',
+  path: '/$settingsId',
+  getParentRoute: () => SettingsRoute,
+} as any)
+
+const LayoverContactRoute = LayoverContactImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => LayoverRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -39,6 +80,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/_layover': {
+      id: '/_layover'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof LayoverImport
+      parentRoute: typeof rootRoute
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -46,44 +94,153 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsImport
+      parentRoute: typeof rootRoute
+    }
+    '/_layover/contact': {
+      id: '/_layover/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof LayoverContactImport
+      parentRoute: typeof LayoverImport
+    }
+    '/settings/$settingsId': {
+      id: '/settings/$settingsId'
+      path: '/$settingsId'
+      fullPath: '/settings/$settingsId'
+      preLoaderRoute: typeof SettingsSettingsIdImport
+      parentRoute: typeof SettingsImport
+    }
+    '/settings/notifications': {
+      id: '/settings/notifications'
+      path: '/notifications'
+      fullPath: '/settings/notifications'
+      preLoaderRoute: typeof SettingsNotificationsImport
+      parentRoute: typeof SettingsImport
+    }
+    '/settings/profile': {
+      id: '/settings/profile'
+      path: '/profile'
+      fullPath: '/settings/profile'
+      preLoaderRoute: typeof SettingsProfileImport
+      parentRoute: typeof SettingsImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface LayoverRouteChildren {
+  LayoverContactRoute: typeof LayoverContactRoute
+}
+
+const LayoverRouteChildren: LayoverRouteChildren = {
+  LayoverContactRoute: LayoverContactRoute,
+}
+
+const LayoverRouteWithChildren =
+  LayoverRoute._addFileChildren(LayoverRouteChildren)
+
+interface SettingsRouteChildren {
+  SettingsSettingsIdRoute: typeof SettingsSettingsIdRoute
+  SettingsNotificationsRoute: typeof SettingsNotificationsRoute
+  SettingsProfileRoute: typeof SettingsProfileRoute
+}
+
+const SettingsRouteChildren: SettingsRouteChildren = {
+  SettingsSettingsIdRoute: SettingsSettingsIdRoute,
+  SettingsNotificationsRoute: SettingsNotificationsRoute,
+  SettingsProfileRoute: SettingsProfileRoute,
+}
+
+const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
+  SettingsRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '': typeof LayoverRouteWithChildren
   '/about': typeof AboutRoute
+  '/settings': typeof SettingsRouteWithChildren
+  '/contact': typeof LayoverContactRoute
+  '/settings/$settingsId': typeof SettingsSettingsIdRoute
+  '/settings/notifications': typeof SettingsNotificationsRoute
+  '/settings/profile': typeof SettingsProfileRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '': typeof LayoverRouteWithChildren
   '/about': typeof AboutRoute
+  '/settings': typeof SettingsRouteWithChildren
+  '/contact': typeof LayoverContactRoute
+  '/settings/$settingsId': typeof SettingsSettingsIdRoute
+  '/settings/notifications': typeof SettingsNotificationsRoute
+  '/settings/profile': typeof SettingsProfileRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/_layover': typeof LayoverRouteWithChildren
   '/about': typeof AboutRoute
+  '/settings': typeof SettingsRouteWithChildren
+  '/_layover/contact': typeof LayoverContactRoute
+  '/settings/$settingsId': typeof SettingsSettingsIdRoute
+  '/settings/notifications': typeof SettingsNotificationsRoute
+  '/settings/profile': typeof SettingsProfileRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about'
+  fullPaths:
+    | '/'
+    | ''
+    | '/about'
+    | '/settings'
+    | '/contact'
+    | '/settings/$settingsId'
+    | '/settings/notifications'
+    | '/settings/profile'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about'
-  id: '__root__' | '/' | '/about'
+  to:
+    | '/'
+    | ''
+    | '/about'
+    | '/settings'
+    | '/contact'
+    | '/settings/$settingsId'
+    | '/settings/notifications'
+    | '/settings/profile'
+  id:
+    | '__root__'
+    | '/'
+    | '/_layover'
+    | '/about'
+    | '/settings'
+    | '/_layover/contact'
+    | '/settings/$settingsId'
+    | '/settings/notifications'
+    | '/settings/profile'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LayoverRoute: typeof LayoverRouteWithChildren
   AboutRoute: typeof AboutRoute
+  SettingsRoute: typeof SettingsRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LayoverRoute: LayoverRouteWithChildren,
   AboutRoute: AboutRoute,
+  SettingsRoute: SettingsRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -97,14 +254,46 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/about"
+        "/_layover",
+        "/about",
+        "/settings"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
+    "/_layover": {
+      "filePath": "_layover.tsx",
+      "children": [
+        "/_layover/contact"
+      ]
+    },
     "/about": {
       "filePath": "about.tsx"
+    },
+    "/settings": {
+      "filePath": "settings.tsx",
+      "children": [
+        "/settings/$settingsId",
+        "/settings/notifications",
+        "/settings/profile"
+      ]
+    },
+    "/_layover/contact": {
+      "filePath": "_layover.contact.tsx",
+      "parent": "/_layover"
+    },
+    "/settings/$settingsId": {
+      "filePath": "settings/$settingsId.tsx",
+      "parent": "/settings"
+    },
+    "/settings/notifications": {
+      "filePath": "settings/notifications.tsx",
+      "parent": "/settings"
+    },
+    "/settings/profile": {
+      "filePath": "settings/profile.tsx",
+      "parent": "/settings"
     }
   }
 }

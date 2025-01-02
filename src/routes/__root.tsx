@@ -1,10 +1,10 @@
-import * as React from 'react'
-import { Link, Outlet, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
+import * as React from "react";
+import { Link, Outlet, createRootRoute } from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 export const Route = createRootRoute({
   component: RootComponent,
-})
+});
 
 function RootComponent() {
   return (
@@ -13,24 +13,54 @@ function RootComponent() {
         <Link
           to="/"
           activeProps={{
-            className: 'font-bold',
+            className: "font-bold",
           }}
           activeOptions={{ exact: true }}
         >
           Home
-        </Link>{' '}
+        </Link>{" "}
         <Link
           to="/about"
           activeProps={{
-            className: 'font-bold',
+            className: "font-bold",
           }}
         >
           About
-        </Link>
+        </Link>{" "}
+        <Link
+          to="/contact"
+          activeProps={{
+            className: "font-bold",
+          }}
+        >
+          Contact
+        </Link>{" "}
+        <Link
+          to="/settings"
+          activeProps={{
+            className: "font-bold",
+          }}
+        >
+          Settings
+        </Link>{" "}
+        <Link
+          to="/settings/notifications"
+          activeProps={{
+            className: "font-bold",
+          }}
+          activeOptions={{ exact: true }}
+          from={Route.fullPath}
+          params={{
+            settingsId: "notifications",
+            auto: true,
+          }}
+        >
+          Settings-Notification
+        </Link>{" "}
       </div>
       <hr />
       <Outlet />
       <TanStackRouterDevtools position="bottom-right" />
     </>
-  )
+  );
 }
