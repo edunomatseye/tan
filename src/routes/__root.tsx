@@ -57,6 +57,16 @@ function RootComponent() {
         >
           Settings-Notification
         </Link>{" "}
+        <Link to="/blog/post">
+          {({ isActive }) => {
+            return (
+              <>
+                <span>My Blog Post</span>
+                <Icon className={isActive ? "active" : "inactive"} />
+              </>
+            );
+          }}
+        </Link>{" "}
       </div>
       <hr />
       <Outlet />
