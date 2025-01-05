@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Link, Outlet, createRootRoute } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { Camera, Icon } from "lucide-react";
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -51,18 +52,31 @@ function RootComponent() {
           activeOptions={{ exact: true }}
           from={Route.fullPath}
           params={{
-            settingsId: "notifications",
+            settingsId: "notificationsId",
             auto: true,
           }}
         >
           Settings-Notification
         </Link>{" "}
-        <Link to="/blog/post">
+        <Link
+          to="/settings/$settingsId"
+          activeProps={{
+            className: "font-bold",
+          }}
+          activeOptions={{ exact: true }}
+          from={Route.fullPath}
+          params={{
+            settingsId: "notice",
+          }}
+        >
+          Settings-Dym
+        </Link>{" "}
+        <Link to="/blog/post" params={{ settingsId: 34 }}>
           {({ isActive }) => {
             return (
               <>
                 <span>My Blog Post</span>
-                <Icon className={isActive ? "active" : "inactive"} />
+                <Camera className={isActive ? "active" : "inactive"} />
               </>
             );
           }}
