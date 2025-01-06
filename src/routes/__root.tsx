@@ -71,7 +71,16 @@ function RootComponent() {
         >
           Settings-Dym
         </Link>{" "}
-        <Link to="/blog/post" params={{ settingsId: 34 }}>
+        <Link
+          to="/blog/post"
+          params={{ settingsId: 34 }}
+          search={{
+            pageIndex: 3,
+            includeCategories: ["electronics", "gifts"],
+            sortBy: "price",
+            desc: true,
+          }}
+        >
           {({ isActive }) => {
             return (
               <>
