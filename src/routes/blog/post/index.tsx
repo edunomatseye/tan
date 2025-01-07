@@ -1,4 +1,9 @@
-import { createFileRoute, useParams, useSearch } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  getRouteApi,
+  useParams,
+  useSearch,
+} from "@tanstack/react-router";
 import { z } from "zod";
 
 const productSearchSchema = z.object({
@@ -13,11 +18,13 @@ export const Route = createFileRoute("/blog/post/")({
 });
 
 function RouteComponent() {
+  const routeApi = getRouteApi("/blog/post/");
   const { id } = useParams({ strict: false });
   const search = useSearch({ strict: false });
   return (
     <>
       <span>{search.page}</span>
+      <span>{routeApi.id}</span>
       <div>Hello "/blog/post/"!</div>
     </>
   );
