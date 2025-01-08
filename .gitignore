@@ -16,3 +16,8 @@ dist/
 .vscode/*
 !.vscode/extensions.json
 .idea
+
+
+
+.nx/cache
+.nx/workspace-data
