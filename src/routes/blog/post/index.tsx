@@ -1,3 +1,4 @@
+import { fetchPosts } from "@/utils/posts";
 import {
   createFileRoute,
   getRouteApi,
@@ -12,16 +13,20 @@ const productSearchSchema = z.object({
   sort: z.enum(["newest", "oldest", "price"]).catch("newest"),
   offset: z.string(),
   limit: z.number(),
+  pageIndex: z.number(),
 });
 
 export const Route = createFileRoute("/blog/post/")({
   component: RouteComponent,
   validateSearch: productSearchSchema,
-  loaderDeps: ({ search: { offset, limit } }) => ({ offset, limit }),
-  loader: ({ deps: { offset, limit } }) =>
+  loaderDeps: ({ search: { offset, limit, pageIndex } }) => ({
+    offset,
+    limit,
+    pageIndex,
+  }),
+  loader: ({ deps: { pageIndex } }) =>
     fetchPosts({
-      offset,
-      limit,
+      pageIndex,
     }),
 });
 
