@@ -32,7 +32,6 @@ export const Route = createFileRoute("/blog/post/")({
 
 function RouteComponent() {
   const routeApi = getRouteApi("/blog/post/");
-  const { id } = useParams({ strict: false });
   const search = useSearch({ strict: false });
   return (
     <>
