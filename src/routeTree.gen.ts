@@ -15,6 +15,7 @@ import { Route as SettingsImport } from './routes/settings'
 import { Route as AboutImport } from './routes/about'
 import { Route as LayoverImport } from './routes/_layover'
 import { Route as IndexImport } from './routes/index'
+import { Route as GameIndexImport } from './routes/game/index'
 import { Route as SettingsProfileImport } from './routes/settings/profile'
 import { Route as SettingsNotificationsImport } from './routes/settings/notifications'
 import { Route as SettingsSettingsIdImport } from './routes/settings/$settingsId'
@@ -43,6 +44,12 @@ const LayoverRoute = LayoverImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const GameIndexRoute = GameIndexImport.update({
+  id: '/game/',
+  path: '/game/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -136,6 +143,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsProfileImport
       parentRoute: typeof SettingsImport
     }
+    '/game/': {
+      id: '/game/'
+      path: '/game'
+      fullPath: '/game'
+      preLoaderRoute: typeof GameIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/blog/post/': {
       id: '/blog/post/'
       path: '/blog/post'
@@ -184,6 +198,7 @@ export interface FileRoutesByFullPath {
   '/settings/$settingsId': typeof SettingsSettingsIdRoute
   '/settings/notifications': typeof SettingsNotificationsRoute
   '/settings/profile': typeof SettingsProfileRoute
+  '/game': typeof GameIndexRoute
   '/blog/post': typeof BlogPostIndexRoute
 }
 
@@ -196,6 +211,7 @@ export interface FileRoutesByTo {
   '/settings/$settingsId': typeof SettingsSettingsIdRoute
   '/settings/notifications': typeof SettingsNotificationsRoute
   '/settings/profile': typeof SettingsProfileRoute
+  '/game': typeof GameIndexRoute
   '/blog/post': typeof BlogPostIndexRoute
 }
 
@@ -209,6 +225,7 @@ export interface FileRoutesById {
   '/settings/$settingsId': typeof SettingsSettingsIdRoute
   '/settings/notifications': typeof SettingsNotificationsRoute
   '/settings/profile': typeof SettingsProfileRoute
+  '/game/': typeof GameIndexRoute
   '/blog/post/': typeof BlogPostIndexRoute
 }
 
@@ -223,6 +240,7 @@ export interface FileRouteTypes {
     | '/settings/$settingsId'
     | '/settings/notifications'
     | '/settings/profile'
+    | '/game'
     | '/blog/post'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -234,6 +252,7 @@ export interface FileRouteTypes {
     | '/settings/$settingsId'
     | '/settings/notifications'
     | '/settings/profile'
+    | '/game'
     | '/blog/post'
   id:
     | '__root__'
@@ -245,6 +264,7 @@ export interface FileRouteTypes {
     | '/settings/$settingsId'
     | '/settings/notifications'
     | '/settings/profile'
+    | '/game/'
     | '/blog/post/'
   fileRoutesById: FileRoutesById
 }
@@ -254,6 +274,7 @@ export interface RootRouteChildren {
   LayoverRoute: typeof LayoverRouteWithChildren
   AboutRoute: typeof AboutRoute
   SettingsRoute: typeof SettingsRouteWithChildren
+  GameIndexRoute: typeof GameIndexRoute
   BlogPostIndexRoute: typeof BlogPostIndexRoute
 }
 
@@ -262,6 +283,7 @@ const rootRouteChildren: RootRouteChildren = {
   LayoverRoute: LayoverRouteWithChildren,
   AboutRoute: AboutRoute,
   SettingsRoute: SettingsRouteWithChildren,
+  GameIndexRoute: GameIndexRoute,
   BlogPostIndexRoute: BlogPostIndexRoute,
 }
 
@@ -279,6 +301,7 @@ export const routeTree = rootRoute
         "/_layover",
         "/about",
         "/settings",
+        "/game/",
         "/blog/post/"
       ]
     },
@@ -317,6 +340,9 @@ export const routeTree = rootRoute
     "/settings/profile": {
       "filePath": "settings/profile.tsx",
       "parent": "/settings"
+    },
+    "/game/": {
+      "filePath": "game/index.tsx"
     },
     "/blog/post/": {
       "filePath": "blog/post/index.tsx"
