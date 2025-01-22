@@ -8,12 +8,14 @@ import {
 import { z } from "zod";
 
 const productSearchSchema = z.object({
-  page: z.number().catch(1),
-  filter: z.string().catch(""),
-  sort: z.enum(["newest", "oldest", "price"]).catch("newest"),
-  offset: z.string(),
-  limit: z.number(),
-  pageIndex: z.number(),
+  page: z.number().catch(1).optional(),
+  filter: z.string().catch("").optional(),
+  sort: z.enum(["newest", "oldest", "price"]).catch("newest").optional(),
+  offset: z.string().optional(),
+  limit: z.number().optional(),
+  pageIndex: z.number().optional(),
+  sortBy: z.string().optional(),
+  desc: z.boolean().optional(),
 });
 
 export const Route = createFileRoute("/blog/post/")({
@@ -25,6 +27,7 @@ export const Route = createFileRoute("/blog/post/")({
     pageIndex,
   }),
   loader: ({ deps: { pageIndex } }) =>
+    pageIndex &&
     fetchPosts({
       pageIndex,
     }),

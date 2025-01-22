@@ -4,38 +4,22 @@ import { z } from "zod";
 import { create } from "zustand";
 import { combine } from "zustand/middleware";
 
-const productSearchSchema = z.object({
-  page: z.number().catch(1),
-  filter: z.string().catch(""),
-  sort: z.enum(["newest", "oldest", "price"]).catch("newest"),
-  offset: z.string(),
-  limit: z.number(),
-  pageIndex: z.number(),
-});
-
 export const Route = createFileRoute("/game/")({
   component: Game,
-  validateSearch: productSearchSchema,
-  loaderDeps: ({ search: { offset, limit, pageIndex } }) => ({
-    offset,
-    limit,
-    pageIndex,
-  }),
-  loader: ({ deps: { pageIndex } }) =>
-    fetchPosts({
-      pageIndex,
-    }),
 });
+
+type Square = "X" | "O" | null;
+type History = Square[][];
 
 const useGameStore = create(
   combine(
     {
-      history: [Array(9).fill(null)],
+      history: [Array(9).fill(null)] as History,
       currentMove: 0,
     },
     (set, get) => {
       return {
-        setHistory: (nextHistory) => {
+        setHistory: (nextHistory: History | ((prev: History) => History)) => {
           set((state) => ({
             history:
               typeof nextHistory === "function"
@@ -43,7 +27,12 @@ const useGameStore = create(
                 : nextHistory,
           }));
         },
-        setCurrentMove: (nextCurrentMove) => {
+        setCurrentMove: (
+          nextCurrentMove:
+            | number
+            | ((arg0: number) => number | undefined)
+            | undefined
+        ) => {
           set((state) => ({
             currentMove:
               typeof nextCurrentMove === "function"
@@ -56,7 +45,12 @@ const useGameStore = create(
   )
 );
 
-function Square({ value, onSquareClick }) {
+interface SquareProps {
+  value: Square;
+  onSquareClick: () => void;
+}
+
+function Square({ value, onSquareClick }: SquareProps) {
   return (
     <button
       style={{
@@ -78,7 +72,13 @@ function Square({ value, onSquareClick }) {
   );
 }
 
-function Board({ xIsNext, squares, onPlay }) {
+interface BoardProps {
+  xIsNext: boolean;
+  squares: Square[];
+  onPlay: (squares: Square[]) => void;
+}
+
+function Board({ xIsNext, squares, onPlay }: BoardProps) {
   const winner = calculateWinner(squares);
   const turns = calculateTurns(squares);
   const player = xIsNext ? "X" : "O";
@@ -121,13 +121,13 @@ export default function Game() {
   const xIsNext = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
 
-  function handlePlay(nextSquares) {
+  function handlePlay(nextSquares: Square[]) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
     setHistory(nextHistory);
     setCurrentMove(nextHistory.length - 1);
   }
 
-  function jumpTo(nextMove) {
+  function jumpTo(nextMove: number) {
     setCurrentMove(nextMove);
   }
 
@@ -164,7 +164,7 @@ export default function Game() {
   );
 }
 
-function calculateWinner(squares) {
+function calculateWinner(squares: Square[]) {
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -186,11 +186,11 @@ function calculateWinner(squares) {
   return null;
 }
 
-function calculateTurns(squares) {
+function calculateTurns(squares: Square[]) {
   return squares.filter((square) => !square).length;
 }
 
-function calculateStatus(winner, turns, player) {
+function calculateStatus(winner: Square, turns: number, player: "X" | "O") {
   if (!winner && !turns) return "Draw";
   if (winner) return `Winner ${winner}`;
   return `Next player: ${player}`;

@@ -45,6 +45,14 @@ function RootComponent() {
           Settings
         </Link>{" "}
         <Link
+          to="/game"
+          activeProps={{
+            className: "font-bold",
+          }}
+        >
+          Tic Tac Toe
+        </Link>{" "}
+        <Link
           to="/settings/notifications"
           activeProps={{
             className: "font-bold",
@@ -76,7 +84,6 @@ function RootComponent() {
           params={{ settingsId: 34 }}
           search={{
             pageIndex: 3,
-            includeCategories: ["electronics", "gifts"],
             sortBy: "price",
             desc: true,
           }}
