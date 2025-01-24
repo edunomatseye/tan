@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { generateText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
+import { claude } from "@ai-sdk/claude";
 import React, { useEffect } from "react";
 
 export const Route = createFileRoute("/ai/")({
