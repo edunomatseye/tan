@@ -26,11 +26,11 @@ export const Route = createFileRoute("/blog/post/")({
     limit,
     pageIndex,
   }),
-  loader: ({ deps: { pageIndex } }) =>
-    pageIndex &&
-    fetchPosts({
-      pageIndex,
-    }),
+  // loader: async ({ deps: { pageIndex } }) =>
+  //   pageIndex &&
+  //   (await fetchPosts({
+  //     pageIndex,
+  //   })),
 });
 
 function RouteComponent() {
@@ -40,7 +40,7 @@ function RouteComponent() {
     <>
       <span>{search.page}</span>
       <span>{routeApi.id}</span>
-      <div>Hello "/blog/post/"!</div>
+      <div>Hello</div>
     </>
   );
 }

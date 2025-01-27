@@ -81,7 +81,6 @@ function RootComponent() {
         </Link>{" "}
         <Link
           to="/blog/post"
-          params={{ settingsId: 34 }}
           search={{
             pageIndex: 3,
             sortBy: "price",
@@ -91,8 +90,10 @@ function RootComponent() {
           {({ isActive }) => {
             return (
               <>
-                <span>My Blog Post</span>
-                <Camera className={isActive ? "active" : "inactive"} />
+                <span>
+                  My Blog Post
+                  {/* <Camera className={isActive ? "active" : "inactive"} /> */}
+                </span>
               </>
             );
           }}
