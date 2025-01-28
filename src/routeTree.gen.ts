@@ -16,6 +16,7 @@ import { Route as AboutImport } from './routes/about'
 import { Route as LayoverImport } from './routes/_layover'
 import { Route as IndexImport } from './routes/index'
 import { Route as GameIndexImport } from './routes/game/index'
+import { Route as DeepseekIndexImport } from './routes/deepseek/index'
 import { Route as AiIndexImport } from './routes/ai/index'
 import { Route as SettingsProfileImport } from './routes/settings/profile'
 import { Route as SettingsNotificationsImport } from './routes/settings/notifications'
@@ -51,6 +52,12 @@ const IndexRoute = IndexImport.update({
 const GameIndexRoute = GameIndexImport.update({
   id: '/game/',
   path: '/game/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DeepseekIndexRoute = DeepseekIndexImport.update({
+  id: '/deepseek/',
+  path: '/deepseek/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -157,6 +164,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AiIndexImport
       parentRoute: typeof rootRoute
     }
+    '/deepseek/': {
+      id: '/deepseek/'
+      path: '/deepseek'
+      fullPath: '/deepseek'
+      preLoaderRoute: typeof DeepseekIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/game/': {
       id: '/game/'
       path: '/game'
@@ -213,6 +227,7 @@ export interface FileRoutesByFullPath {
   '/settings/notifications': typeof SettingsNotificationsRoute
   '/settings/profile': typeof SettingsProfileRoute
   '/ai': typeof AiIndexRoute
+  '/deepseek': typeof DeepseekIndexRoute
   '/game': typeof GameIndexRoute
   '/blog/post': typeof BlogPostIndexRoute
 }
@@ -227,6 +242,7 @@ export interface FileRoutesByTo {
   '/settings/notifications': typeof SettingsNotificationsRoute
   '/settings/profile': typeof SettingsProfileRoute
   '/ai': typeof AiIndexRoute
+  '/deepseek': typeof DeepseekIndexRoute
   '/game': typeof GameIndexRoute
   '/blog/post': typeof BlogPostIndexRoute
 }
@@ -242,6 +258,7 @@ export interface FileRoutesById {
   '/settings/notifications': typeof SettingsNotificationsRoute
   '/settings/profile': typeof SettingsProfileRoute
   '/ai/': typeof AiIndexRoute
+  '/deepseek/': typeof DeepseekIndexRoute
   '/game/': typeof GameIndexRoute
   '/blog/post/': typeof BlogPostIndexRoute
 }
@@ -258,6 +275,7 @@ export interface FileRouteTypes {
     | '/settings/notifications'
     | '/settings/profile'
     | '/ai'
+    | '/deepseek'
     | '/game'
     | '/blog/post'
   fileRoutesByTo: FileRoutesByTo
@@ -271,6 +289,7 @@ export interface FileRouteTypes {
     | '/settings/notifications'
     | '/settings/profile'
     | '/ai'
+    | '/deepseek'
     | '/game'
     | '/blog/post'
   id:
@@ -284,6 +303,7 @@ export interface FileRouteTypes {
     | '/settings/notifications'
     | '/settings/profile'
     | '/ai/'
+    | '/deepseek/'
     | '/game/'
     | '/blog/post/'
   fileRoutesById: FileRoutesById
@@ -295,6 +315,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   SettingsRoute: typeof SettingsRouteWithChildren
   AiIndexRoute: typeof AiIndexRoute
+  DeepseekIndexRoute: typeof DeepseekIndexRoute
   GameIndexRoute: typeof GameIndexRoute
   BlogPostIndexRoute: typeof BlogPostIndexRoute
 }
@@ -305,6 +326,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   SettingsRoute: SettingsRouteWithChildren,
   AiIndexRoute: AiIndexRoute,
+  DeepseekIndexRoute: DeepseekIndexRoute,
   GameIndexRoute: GameIndexRoute,
   BlogPostIndexRoute: BlogPostIndexRoute,
 }
@@ -324,6 +346,7 @@ export const routeTree = rootRoute
         "/about",
         "/settings",
         "/ai/",
+        "/deepseek/",
         "/game/",
         "/blog/post/"
       ]
@@ -366,6 +389,9 @@ export const routeTree = rootRoute
     },
     "/ai/": {
       "filePath": "ai/index.tsx"
+    },
+    "/deepseek/": {
+      "filePath": "deepseek/index.tsx"
     },
     "/game/": {
       "filePath": "game/index.tsx"
