@@ -2,9 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { deepseek } from "@ai-sdk/deepseek";
 import { generateText } from "ai";
 
-console.log(result.experimental_providerMetadata);
-// Example output: { deepseek: { promptCacheHitTokens: 1856, promptCacheMissTokens: 5 } }
-
 export const Route = createFileRoute("/deepseek/")({
   component: RouteComponent,
 });
