@@ -41,6 +41,7 @@ function RouteComponent() {
       <span>{search.page}</span>
       <span>{routeApi.id}</span>
       <div>Hello</div>
+      <div>Hello "/blog/post/"!</div>
     </>
   );
 }

@@ -21,8 +21,10 @@ import { Route as AiIndexImport } from './routes/ai/index'
 import { Route as SettingsProfileImport } from './routes/settings/profile'
 import { Route as SettingsNotificationsImport } from './routes/settings/notifications'
 import { Route as SettingsSettingsIdImport } from './routes/settings/$settingsId'
+import { Route as BlogPostImport } from './routes/blog/post'
 import { Route as LayoverContactImport } from './routes/_layover.contact'
 import { Route as BlogPostIndexImport } from './routes/blog/post/index'
+import { Route as BlogPostPostImport } from './routes/blog/post/post'
 
 // Create/Update Routes
 
@@ -85,6 +87,12 @@ const SettingsSettingsIdRoute = SettingsSettingsIdImport.update({
   getParentRoute: () => SettingsRoute,
 } as any)
 
+const BlogPostRoute = BlogPostImport.update({
+  id: '/blog/post',
+  path: '/blog/post',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const LayoverContactRoute = LayoverContactImport.update({
   id: '/contact',
   path: '/contact',
@@ -92,9 +100,15 @@ const LayoverContactRoute = LayoverContactImport.update({
 } as any)
 
 const BlogPostIndexRoute = BlogPostIndexImport.update({
-  id: '/blog/post/',
-  path: '/blog/post/',
-  getParentRoute: () => rootRoute,
+  id: '/',
+  path: '/',
+  getParentRoute: () => BlogPostRoute,
+} as any)
+
+const BlogPostPostRoute = BlogPostPostImport.update({
+  id: '/post',
+  path: '/post',
+  getParentRoute: () => BlogPostRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -135,6 +149,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/contact'
       preLoaderRoute: typeof LayoverContactImport
       parentRoute: typeof LayoverImport
+    }
+    '/blog/post': {
+      id: '/blog/post'
+      path: '/blog/post'
+      fullPath: '/blog/post'
+      preLoaderRoute: typeof BlogPostImport
+      parentRoute: typeof rootRoute
     }
     '/settings/$settingsId': {
       id: '/settings/$settingsId'
@@ -178,12 +199,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GameIndexImport
       parentRoute: typeof rootRoute
     }
+    '/blog/post/post': {
+      id: '/blog/post/post'
+      path: '/post'
+      fullPath: '/blog/post/post'
+      preLoaderRoute: typeof BlogPostPostImport
+      parentRoute: typeof BlogPostImport
+    }
     '/blog/post/': {
       id: '/blog/post/'
-      path: '/blog/post'
-      fullPath: '/blog/post'
+      path: '/'
+      fullPath: '/blog/post/'
       preLoaderRoute: typeof BlogPostIndexImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof BlogPostImport
     }
   }
 }
@@ -217,19 +245,35 @@ const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
   SettingsRouteChildren,
 )
 
+interface BlogPostRouteChildren {
+  BlogPostPostRoute: typeof BlogPostPostRoute
+  BlogPostIndexRoute: typeof BlogPostIndexRoute
+}
+
+const BlogPostRouteChildren: BlogPostRouteChildren = {
+  BlogPostPostRoute: BlogPostPostRoute,
+  BlogPostIndexRoute: BlogPostIndexRoute,
+}
+
+const BlogPostRouteWithChildren = BlogPostRoute._addFileChildren(
+  BlogPostRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof LayoverRouteWithChildren
   '/about': typeof AboutRoute
   '/settings': typeof SettingsRouteWithChildren
   '/contact': typeof LayoverContactRoute
+  '/blog/post': typeof BlogPostRouteWithChildren
   '/settings/$settingsId': typeof SettingsSettingsIdRoute
   '/settings/notifications': typeof SettingsNotificationsRoute
   '/settings/profile': typeof SettingsProfileRoute
   '/ai': typeof AiIndexRoute
   '/deepseek': typeof DeepseekIndexRoute
   '/game': typeof GameIndexRoute
-  '/blog/post': typeof BlogPostIndexRoute
+  '/blog/post/post': typeof BlogPostPostRoute
+  '/blog/post/': typeof BlogPostIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -244,6 +288,7 @@ export interface FileRoutesByTo {
   '/ai': typeof AiIndexRoute
   '/deepseek': typeof DeepseekIndexRoute
   '/game': typeof GameIndexRoute
+  '/blog/post/post': typeof BlogPostPostRoute
   '/blog/post': typeof BlogPostIndexRoute
 }
 
@@ -254,12 +299,14 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/settings': typeof SettingsRouteWithChildren
   '/_layover/contact': typeof LayoverContactRoute
+  '/blog/post': typeof BlogPostRouteWithChildren
   '/settings/$settingsId': typeof SettingsSettingsIdRoute
   '/settings/notifications': typeof SettingsNotificationsRoute
   '/settings/profile': typeof SettingsProfileRoute
   '/ai/': typeof AiIndexRoute
   '/deepseek/': typeof DeepseekIndexRoute
   '/game/': typeof GameIndexRoute
+  '/blog/post/post': typeof BlogPostPostRoute
   '/blog/post/': typeof BlogPostIndexRoute
 }
 
@@ -271,13 +318,15 @@ export interface FileRouteTypes {
     | '/about'
     | '/settings'
     | '/contact'
+    | '/blog/post'
     | '/settings/$settingsId'
     | '/settings/notifications'
     | '/settings/profile'
     | '/ai'
     | '/deepseek'
     | '/game'
-    | '/blog/post'
+    | '/blog/post/post'
+    | '/blog/post/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -291,6 +340,7 @@ export interface FileRouteTypes {
     | '/ai'
     | '/deepseek'
     | '/game'
+    | '/blog/post/post'
     | '/blog/post'
   id:
     | '__root__'
@@ -299,12 +349,14 @@ export interface FileRouteTypes {
     | '/about'
     | '/settings'
     | '/_layover/contact'
+    | '/blog/post'
     | '/settings/$settingsId'
     | '/settings/notifications'
     | '/settings/profile'
     | '/ai/'
     | '/deepseek/'
     | '/game/'
+    | '/blog/post/post'
     | '/blog/post/'
   fileRoutesById: FileRoutesById
 }
@@ -314,10 +366,10 @@ export interface RootRouteChildren {
   LayoverRoute: typeof LayoverRouteWithChildren
   AboutRoute: typeof AboutRoute
   SettingsRoute: typeof SettingsRouteWithChildren
+  BlogPostRoute: typeof BlogPostRouteWithChildren
   AiIndexRoute: typeof AiIndexRoute
   DeepseekIndexRoute: typeof DeepseekIndexRoute
   GameIndexRoute: typeof GameIndexRoute
-  BlogPostIndexRoute: typeof BlogPostIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -325,10 +377,10 @@ const rootRouteChildren: RootRouteChildren = {
   LayoverRoute: LayoverRouteWithChildren,
   AboutRoute: AboutRoute,
   SettingsRoute: SettingsRouteWithChildren,
+  BlogPostRoute: BlogPostRouteWithChildren,
   AiIndexRoute: AiIndexRoute,
   DeepseekIndexRoute: DeepseekIndexRoute,
   GameIndexRoute: GameIndexRoute,
-  BlogPostIndexRoute: BlogPostIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -345,10 +397,10 @@ export const routeTree = rootRoute
         "/_layover",
         "/about",
         "/settings",
+        "/blog/post",
         "/ai/",
         "/deepseek/",
-        "/game/",
-        "/blog/post/"
+        "/game/"
       ]
     },
     "/": {
@@ -375,6 +427,13 @@ export const routeTree = rootRoute
       "filePath": "_layover.contact.tsx",
       "parent": "/_layover"
     },
+    "/blog/post": {
+      "filePath": "blog/post.tsx",
+      "children": [
+        "/blog/post/post",
+        "/blog/post/"
+      ]
+    },
     "/settings/$settingsId": {
       "filePath": "settings/$settingsId.tsx",
       "parent": "/settings"
@@ -396,8 +455,13 @@ export const routeTree = rootRoute
     "/game/": {
       "filePath": "game/index.tsx"
     },
+    "/blog/post/post": {
+      "filePath": "blog/post/post.tsx",
+      "parent": "/blog/post"
+    },
     "/blog/post/": {
-      "filePath": "blog/post/index.tsx"
+      "filePath": "blog/post/index.tsx",
+      "parent": "/blog/post"
     }
   }
 }
