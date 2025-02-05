@@ -4,17 +4,27 @@ import { anthropic } from "@ai-sdk/anthropic";
 import { generateText } from "ai";
 
 export const Route = createFileRoute("/deepseek/")({
-  component: RouteComponent,
+  component: DeepseekPage,
 });
 
-async function RouteComponent() {
-  const result = await generateText({
-    model: anthropic("claude-3-5-sonnet-latest"),
-    prompt: "Your prompt here",
-  });
+function DeepseekPage() {
+  const handleGenerate = async () => {
+    const result = await generateText({
+      model: anthropic("claude-3-5-sonnet-latest"),
+      prompt: "Your prompt here",
+    });
+    return result;
+  };
+
   return (
-    <div>
-      Hello "/deepseek/"! {JSON.stringify(result.experimental_providerMetadata)}
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Deepseek Demo</h1>
+      <button
+        onClick={handleGenerate}
+        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+      >
+        Generate Text
+      </button>
     </div>
   );
 }
