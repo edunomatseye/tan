@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as SettingsImport } from './routes/settings'
+import { Route as ContactsImport } from './routes/contacts'
 import { Route as AboutImport } from './routes/about'
 import { Route as LayoverImport } from './routes/_layover'
 import { Route as IndexImport } from './routes/index'
@@ -31,6 +32,12 @@ import { Route as BlogPostPostImport } from './routes/blog/post/post'
 const SettingsRoute = SettingsImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ContactsRoute = ContactsImport.update({
+  id: '/contacts',
+  path: '/contacts',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -134,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutImport
+      parentRoute: typeof rootRoute
+    }
+    '/contacts': {
+      id: '/contacts'
+      path: '/contacts'
+      fullPath: '/contacts'
+      preLoaderRoute: typeof ContactsImport
       parentRoute: typeof rootRoute
     }
     '/settings': {
@@ -263,6 +277,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof LayoverRouteWithChildren
   '/about': typeof AboutRoute
+  '/contacts': typeof ContactsRoute
   '/settings': typeof SettingsRouteWithChildren
   '/contact': typeof LayoverContactRoute
   '/blog/post': typeof BlogPostRouteWithChildren
@@ -280,6 +295,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof LayoverRouteWithChildren
   '/about': typeof AboutRoute
+  '/contacts': typeof ContactsRoute
   '/settings': typeof SettingsRouteWithChildren
   '/contact': typeof LayoverContactRoute
   '/settings/$settingsId': typeof SettingsSettingsIdRoute
@@ -297,6 +313,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_layover': typeof LayoverRouteWithChildren
   '/about': typeof AboutRoute
+  '/contacts': typeof ContactsRoute
   '/settings': typeof SettingsRouteWithChildren
   '/_layover/contact': typeof LayoverContactRoute
   '/blog/post': typeof BlogPostRouteWithChildren
@@ -316,6 +333,7 @@ export interface FileRouteTypes {
     | '/'
     | ''
     | '/about'
+    | '/contacts'
     | '/settings'
     | '/contact'
     | '/blog/post'
@@ -332,6 +350,7 @@ export interface FileRouteTypes {
     | '/'
     | ''
     | '/about'
+    | '/contacts'
     | '/settings'
     | '/contact'
     | '/settings/$settingsId'
@@ -347,6 +366,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_layover'
     | '/about'
+    | '/contacts'
     | '/settings'
     | '/_layover/contact'
     | '/blog/post'
@@ -365,6 +385,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LayoverRoute: typeof LayoverRouteWithChildren
   AboutRoute: typeof AboutRoute
+  ContactsRoute: typeof ContactsRoute
   SettingsRoute: typeof SettingsRouteWithChildren
   BlogPostRoute: typeof BlogPostRouteWithChildren
   AiIndexRoute: typeof AiIndexRoute
@@ -376,6 +397,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LayoverRoute: LayoverRouteWithChildren,
   AboutRoute: AboutRoute,
+  ContactsRoute: ContactsRoute,
   SettingsRoute: SettingsRouteWithChildren,
   BlogPostRoute: BlogPostRouteWithChildren,
   AiIndexRoute: AiIndexRoute,
@@ -396,6 +418,7 @@ export const routeTree = rootRoute
         "/",
         "/_layover",
         "/about",
+        "/contacts",
         "/settings",
         "/blog/post",
         "/ai/",
@@ -414,6 +437,9 @@ export const routeTree = rootRoute
     },
     "/about": {
       "filePath": "about.tsx"
+    },
+    "/contacts": {
+      "filePath": "contacts.tsx"
     },
     "/settings": {
       "filePath": "settings.tsx",
