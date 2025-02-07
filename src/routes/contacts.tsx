@@ -1,21 +1,25 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { useForm } from 'react-hook-form'
+import { createFileRoute } from "@tanstack/react-router";
+import { useForm } from "react-hook-form";
 
-export const Route = createFileRoute('/contacts')({
+export const Route = createFileRoute("/contacts")({
   component: ContactPage,
-})
+});
 
 function ContactPage() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm()
+  } = useForm<{
+    name: string;
+    email: string;
+    message: string;
+  }>();
 
-  const onSubmit = (data) => {
-    console.log(data)
+  const onSubmit = (data: { name: string; email: string; message: string }) => {
+    console.log(data);
     // Handle form submission here
-  }
+  };
 
   return (
     <div className="p-4 max-w-md mx-auto">
@@ -26,7 +30,7 @@ function ContactPage() {
             Name
           </label>
           <input
-            {...register('name', { required: 'Name is required' })}
+            {...register("name", { required: "Name is required" })}
             id="name"
             className="w-full px-3 py-2 border rounded"
           />
@@ -40,11 +44,11 @@ function ContactPage() {
             Email
           </label>
           <input
-            {...register('email', {
-              required: 'Email is required',
+            {...register("email", {
+              required: "Email is required",
               pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: 'Invalid email address',
+                message: "Invalid email address",
               },
             })}
             id="email"
@@ -61,11 +65,11 @@ function ContactPage() {
             Message
           </label>
           <textarea
-            {...register('message', {
-              required: 'Message is required',
+            {...register("message", {
+              required: "Message is required",
               minLength: {
                 value: 10,
-                message: 'Message must be at least 10 characters',
+                message: "Message must be at least 10 characters",
               },
             })}
             id="message"
@@ -87,5 +91,5 @@ function ContactPage() {
         </button>
       </form>
     </div>
-  )
+  );
 }
